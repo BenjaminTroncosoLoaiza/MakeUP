@@ -24,9 +24,11 @@ app.get('/productos', (req, res) => {
   res.render('home', { titulo: 'Make Up 7x8', mensaje: '¡Bienvenido(a)! Aqui puedes comprar todo tipo de maquillaje' });
   
 });
-
+app.get('/inicio', (req, res) => {
+  res.render('inicio', { titulo: 'Make Up 7x8', mensaje: '¡Bienvenido(a)! Aqui puedes comprar todo tipo de maquillaje' });
+  
+});
 // Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
-
