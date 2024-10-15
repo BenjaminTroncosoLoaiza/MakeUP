@@ -1,0 +1,177 @@
+/* styles.css */
+
+/* Estilos generales */
+body {
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Encabezado */
+header {
+    color: white;
+    text-align: center;
+    background-color: #f8c1d4;
+    /* Color de fondo del header */
+    padding: 20px;
+    /* Espaciado alrededor del header */
+    text-align: center;
+    /* Centrar el contenido del header */
+}
+
+header h1 {
+    margin: 0;
+    color: black;
+}
+
+/* Navegación */
+.search-container {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+    /* Espacio superior si es necesario */
+}
+
+.search-container input {
+    padding: 10px 10px 10px 30px;
+    /* Espaciado para el ícono */
+    border: 1px solid #ccc;
+    /* Borde gris claro */
+    border-radius: 20px;
+    /* Bordes redondeados */
+    font-size: 16px;
+    /* Tamaño de fuente */
+}
+
+.icon-search {
+    position: absolute;
+    left: 10px;
+    /* Posición del ícono */
+    top: 50%;
+    transform: translateY(-50%);
+    /* Centrar verticalmente el ícono */
+    color: #333;
+    /* Color del ícono */
+    width: 16px;
+    /* Ancho del ícono */
+    height: 16px;
+    /* Alto del ícono */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+h3 {
+    text-align: center;
+}
+
+.card {
+    margin: 20px;
+    text-align: center;
+    padding: 15px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1 1 30%;
+    /* Ajusta el tamaño de las tarjetas */
+    max-width: 300px;
+    /* Ancho máximo opcional */
+}
+
+/* Estilo de las tarjetas */
+.card {
+    margin: 20px;
+    text-align: center;
+    padding: 15px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1 1 30%;
+    max-width: 300px;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px 5px 0 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin: 10px 0;
+    /* Margen alrededor del título */
+}
+
+.card .btn {
+    background-color: #ff4081;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 20px;
+    /* Aumentar el margen superior para separar del texto */
+    text-decoration: none;
+    /* Eliminar la línea del texto */
+    display: inline-block;
+    /* Asegurarse de que el botón se comporte como un bloque en línea */
+}
+
+.card .btn:hover {
+    background-color: #e91e63;
+    transform: translateY(-2px);
+}
+
+.card .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Sección principal */
+main {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+
+/* Pie de página */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
