@@ -13,7 +13,7 @@ body {
 }
 
 /* Encabezado */
-header.productos {
+header {
     color: white;
     text-align: center;
     background-color: #f8c1d4;
@@ -76,6 +76,7 @@ nav ul li {
 nav ul li a {
     color: white;
     text-decoration: none;
+    margin: 25px;
 }
 
 nav ul li a:hover {
@@ -85,7 +86,9 @@ nav ul li a:hover {
 h3 {
     text-align: center;
 }
-
+h2 {
+    text-align: center;
+}
 .card {
     margin: 20px;
     text-align: center;
@@ -181,4 +184,10 @@ nav.inicio{
 img.coce{
     display: block;
     width: 500px;
+}
+h1.pod{
+    margin: 50px;
+}
+.aaa{
+    text-align: end;
 }
