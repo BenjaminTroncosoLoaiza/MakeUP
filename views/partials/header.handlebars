@@ -1,13 +1,30 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <header>
   <h1>{{titulo}}</h1>
+  
   <nav>
     <ul>
       <li><a href="/">Inicio</a></li>
       <li><a href="/productos">Productos</a></li>
       <li><a href="/sobre">Sobre Nosotros</a></li>
-      <li><a href="/contacto">Contacto</a></li>
     </ul>
-
-    <img src="/img/hocico.jpg" width="100%">
+    <img src="/img/hocico.jpg" style="max-width: 100%; height: auto;" alt="Descripción de la imagen">
+    
+    <div class="cart-icon">
+      <a href="/carrito" aria-label="Ver carrito">
+        <i class="fas fa-shopping-cart"></i>
+      </a>
+    </div>
   </nav>
+
+  <div class="lupa-container">
+    <input type="text" placeholder="Buscar Producto..." aria-label="Buscar Producto">
+    <span class="icon-search" role="button" aria-label="Buscar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M10.5 2a8.5 8.5 0 1 0 6.353 14.15l5.648 5.648a1 1 0 0 0 1.415-1.415l-5.648-5.648A8.5 8.5 0 0 0 10.5 2zm0 15a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13z"/>
+      </svg>
+    </span>
+  </div>
 </header>
+
