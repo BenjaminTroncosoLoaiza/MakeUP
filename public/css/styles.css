@@ -1,177 +1,388 @@
 /* styles.css */
 
-/* Estilos generales */
+/* Estilos generales para el cuerpo de la página */
 body {
     font-family: 'Poppins', sans-serif;
+    /* Fuente utilizada en el cuerpo */
     text-transform: uppercase;
+    /* Convierte el texto a mayúsculas */
     letter-spacing: 1px;
+    /* Espaciado entre letras */
     font-weight: 700;
+    /* Grosor de la fuente */
     margin: 0;
+    /* Elimina márgenes por defecto */
     padding: 0;
+    /* Elimina padding por defecto */
     background-color: #f4f4f4;
+    /* Color de fondo de la página */
     color: #333;
+    /* Color del texto */
 }
 
-/* Encabezado */
+/* Estilos para el encabezado */
 header {
     color: white;
+    /* Color del texto en el encabezado */
     text-align: center;
+    /* Centra el texto horizontalmente */
     background-color: #f8c1d4;
-    /* Color de fondo del header */
+    /* Color de fondo del encabezado */
     padding: 20px;
-    /* Espaciado alrededor del header */
-    text-align: center;
-    /* Centrar el contenido del header */
+    /* Espacio interno del encabezado */
+    position: relative;
+    /* Posicionamiento relativo para elementos hijos */
 }
 
+/* Estilo para el título del encabezado */
 header h1 {
     margin: 0;
+    /* Elimina márgenes del título */
     color: black;
+    /* Color del título */
+    font-size: 48px;
+    /* Tamaño de la fuente del título */
+    font-family: 'Cinzel', serif;
+    /* Fuente del título */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    /* Sombra para dar profundidad */
 }
 
-/* Navegación */
-.search-container {
-    position: relative;
-    display: inline-block;
+/* Estilo para la imagen dentro del nav */
+nav img {
+    width: 100%;
+    /* Ajusta el ancho de la imagen al 100% del contenedor */
+    height: auto;
+    /* Mantiene la proporción de la imagen */
+    max-width: none;
+    /* Permite que la imagen exceda el 100% del contenedor */
+    margin: 0 auto;
+    /* Centra la imagen en el contenedor */
+    display: block;
+    /* Asegura que el margen funcione correctamente */
+}
+
+/* Contenedor de búsqueda */
+.lupa-container {
     margin-top: 20px;
-    /* Espacio superior si es necesario */
+    /* Espacio superior para separar del encabezado */
+    display: flex;
+    /* Usa flexbox para alinear elementos */
+    justify-content: center;
+    /* Centra horizontalmente */
+    align-items: center;
+    /* Centra verticalmente */
 }
 
-.search-container input {
-    padding: 10px 10px 10px 30px;
-    /* Espaciado para el ícono */
+/* Estilo para el input de búsqueda */
+.lupa-container input {
+    padding: 10px;
+    /* Espacio interno del input */
     border: 1px solid #ccc;
-    /* Borde gris claro */
-    border-radius: 20px;
+    /* Borde del input */
+    border-radius: 5px;
     /* Bordes redondeados */
     font-size: 16px;
-    /* Tamaño de fuente */
+    /* Tamaño de la fuente del input */
+    width: 250px;
+    /* Ancho fijo del input */
+    transition: border-color 0.3s;
+    /* Transición suave para el borde */
 }
 
+/* Efecto hover para el input de búsqueda */
+.lupa-container input:hover {
+    border-color: #ff4081;
+    /* Cambia el color del borde al pasar el ratón */
+}
+
+/* Estilo para el ícono de búsqueda */
 .icon-search {
-    position: absolute;
-    left: 10px;
-    /* Posición del ícono */
-    top: 50%;
-    transform: translateY(-50%);
-    /* Centrar verticalmente el ícono */
-    color: #333;
-    /* Color del ícono */
-    width: 16px;
-    /* Ancho del ícono */
-    height: 16px;
-    /* Alto del ícono */
+    cursor: pointer;
+    /* Cambia el cursor al pasar sobre el ícono */
+    margin-left: 10px;
+    /* Espacio entre el input y el ícono */
+    font-size: 36px;
+    /* Tamaño del ícono */
+    vertical-align: middle;
+    /* Alinea verticalmente el ícono */
 }
 
+/* Estilos para la lista de navegación */
 nav ul {
     list-style-type: none;
+    /* Elimina los puntos de la lista */
     padding: 0;
+    /* Elimina el padding por defecto */
 }
 
+/* Estilos para los elementos de la lista en la navegación */
 nav ul li {
     display: inline;
+    /* Muestra los elementos en línea */
     margin: 0 15px;
+    /* Espacio entre los elementos de la lista */
 }
 
+/* Estilos para los enlaces de la navegación */
 nav ul li a {
     color: white;
+    /* Color del texto del enlace */
     text-decoration: none;
+    /* Elimina el subrayado del enlace */
+    transition: color 0.3s;
+    /* Transición suave para el color */
 }
 
+/* Efecto hover en los enlaces de navegación */
 nav ul li a:hover {
-    text-decoration: underline;
+    color: #ff4081;
+    /* Cambia el color del enlace al pasar el ratón */
+    text-decoration: none;
+    /* Asegúrate de que no haya subrayado al pasar el ratón */
 }
 
-h3 {
+/* Estilo para los encabezados h3 */
+h1,
+h2,
+h3,
+h4 {
     text-align: center;
+    /* Centra el texto */
 }
 
+/* Estilo para las tarjetas de productos */
 .card {
     margin: 20px;
+    /* Margen alrededor de la tarjeta */
     text-align: center;
+    /* Centra el texto dentro de la tarjeta */
     padding: 15px;
+    /* Espacio interno de la tarjeta */
     background-color: white;
+    /* Color de fondo de la tarjeta */
     border-radius: 5px;
+    /* Bordes redondeados */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Sombra de la tarjeta */
     flex: 1 1 30%;
-    /* Ajusta el tamaño de las tarjetas */
+    /* Permite que la tarjeta crezca y se encoja */
     max-width: 300px;
-    /* Ancho máximo opcional */
+    /* Ancho máximo de la tarjeta */
+    display: flex;
+    /* Usa flexbox para alinear contenido */
+    flex-direction: column;
+    /* Coloca elementos en columna */
+    justify-content: space-between;
+    /* Espacio entre elementos */
 }
 
-/* Estilo de las tarjetas */
-.card {
-    margin: 20px;
-    text-align: center;
-    padding: 15px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    flex: 1 1 30%;
-    max-width: 300px;
-}
-
+/* Estilo para la imagen dentro de la tarjeta */
 .card img {
     width: 100%;
+    /* Ancho de la imagen al 100% del contenedor */
     height: auto;
+    /* Mantiene la proporción de la imagen */
     border-radius: 5px 5px 0 0;
+    /* Bordes redondeados en la parte superior */
 }
 
+/* Estilo para el cuerpo de la tarjeta */
 .card-body {
     padding: 20px;
+    /* Espacio interno del cuerpo de la tarjeta */
 }
 
+/* Estilo para el título de la tarjeta */
 .card-title {
     font-size: 1.25rem;
+    /* Tamaño de la fuente del título */
     margin: 10px 0;
-    /* Margen alrededor del título */
+    /* Margen arriba y abajo del título */
 }
 
+/* Estilo para el botón dentro de la tarjeta */
 .card .btn {
     background-color: #ff4081;
+    /* Color de fondo del botón */
     color: white;
+    /* Color del texto del botón */
     padding: 12px 24px;
+    /* Espaciado interno del botón */
     border: none;
+    /* Sin borde */
     border-radius: 30px;
+    /* Bordes redondeados */
     cursor: pointer;
+    /* Cambia el cursor al pasar sobre el botón */
     font-size: 16px;
+    /* Tamaño de la fuente del botón */
     font-weight: bold;
+    /* Grosor de la fuente del botón */
     text-transform: uppercase;
+    /* Convierte el texto a mayúsculas */
     letter-spacing: 1px;
-    margin-top: 20px;
-    /* Aumentar el margen superior para separar del texto */
+    /* Espaciado entre letras en el botón */
+    margin-top: auto;
+    /* Empuja el botón hacia abajo */
     text-decoration: none;
-    /* Eliminar la línea del texto */
+    /* Elimina el subrayado del botón */
     display: inline-block;
-    /* Asegurarse de que el botón se comporte como un bloque en línea */
+    /* Muestra el botón como un bloque en línea */
+    transition: background-color 0.3s, transform 0.3s;
+    /* Transiciones suaves */
 }
 
+/* Efecto hover para el botón */
 .card .btn:hover {
     background-color: #e91e63;
-    transform: translateY(-2px);
+    /* Cambia el color de fondo al pasar el ratón */
+    transform: scale(1.05);
+    /* Eleva el botón ligeramente */
 }
 
+/* Efecto al hacer clic en el botón */
 .card .btn:active {
     transform: translateY(0);
+    /* Restablece la posición al hacer clic */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Sombra al hacer clic */
 }
 
-/* Sección principal */
+/* Sección principal de la página */
 main {
     padding: 20px;
+    /* Espacio interno de la sección principal */
     display: flex;
+    /* Usa flexbox para alinear contenido */
     flex-wrap: wrap;
+    /* Permite que los elementos se envuelvan */
     justify-content: space-around;
+    /* Espacio entre elementos */
 }
 
-
-/* Pie de página */
+/* Estilos para el pie de página */
 footer {
     text-align: center;
+    /* Centra el texto en el pie de página */
     padding: 10px;
+    /* Espacio interno del pie de página */
     background-color: #333;
+    /* Color de fondo del pie de página */
     color: white;
+    /* Color del texto en el pie de página */
     position: relative;
+    /* Posicionamiento relativo */
     bottom: 0;
+    /* Alinea el pie de página en la parte inferior */
     width: 100%;
+    /* Ancho del pie de página al 100% */
+}
+
+/* Estilo para las tarjetas en la sección "Sobre" */
+.sobre .card {
+    width: 200px;
+    /* Ancho fijo de la tarjeta */
+    height: 300px;
+    /* Alto fijo de la tarjeta */
+    margin: 10px;
+    /* Margen alrededor de la tarjeta */
+    display: flex;
+    /* Usa flexbox para alinear contenido */
+    flex-direction: column;
+    /* Coloca elementos en columna */
+    align-items: center;
+    /* Centra horizontalmente los elementos */
+    justify-content: space-between;
+    /* Espacio entre elementos */
+    border: 1px solid #ccc;
+    /* Borde de la tarjeta */
+    border-radius: 10px;
+    /* Bordes redondeados de la tarjeta */
+    overflow: hidden;
+    /* Oculta el contenido que se desborda */
+}
+
+/* Estilo para la imagen dentro de la tarjeta "Sobre" */
+.sobre .card img {
+    width: 100%;
+    /* Ancho de la imagen al 100% del contenedor */
+    height: 150px;
+    /* Altura fija de la imagen */
+    object-fit: cover;
+    /* Mantiene la proporción de la imagen */
+}
+
+/* Estilo para los encabezados y párrafos dentro de la tarjeta "Sobre" */
+.sobre .card h3,
+.card p {
+    margin: 0;
+    /* Elimina márgenes */
+    text-align: center;
+    /* Centra el texto */
+}
+
+/* Estilo para el ícono del carrito de compras */
+.cart-icon {
+    position: absolute;
+    /* Posicionamiento absoluto */
+    top: 20px;
+    /* Ajusta la distancia desde la parte superior */
+    right: 20px;
+    /* Ajusta la distancia desde la derecha */
+}
+
+/* Estilo para el ícono dentro del carrito de compras */
+.cart-icon i {
+    font-size: 40px;
+    /* Aumenta el tamaño del ícono */
+    color: crimson;
+    /* Color inicial del ícono */
+    transition: color 0.3s;
+    /* Transición suave para el color */
+}
+
+/* Efecto hover para el ícono del carrito */
+.cart-icon:hover i {
+    color: #ff4081;
+    /* Cambia el color al pasar el ratón */
+}
+
+.pod {
+    font-size: 48px; /* Tamaño grande para el título */
+    font-weight: bold; /* Negrita */
+    margin: 20px 0; /* Espaciado arriba y abajo */
+}
+h2 {
+    font-size: 24px; /* Tamaño más pequeño para el subtítulo */
+    font-weight: normal; /* Normal para el subtítulo */
+    margin-top: 10px; /* Espacio entre título y subtítulo */
+    color: #555; /* Color gris para el subtítulo */
+}
+
+.mostrar {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff; /* Color del texto */
+    background-color: #ff4081; /* Color de fondo */
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s, transform 0.3s; /* Transición suave */
+    margin-bottom: 40px; /* Aumentar espacio entre botones */
+}
+
+.mostrar:hover {
+    background-color: #e91e63;
+    /* Color de fondo al pasar el ratón */
+    transform: scale(1.05);
+    /* Efecto de aumento al pasar el ratón */
+}
+
+.container {
+    justify-content: center; /* Centrar el contenido */
+    align-items: center; /* Alinear verticalmente */
+    flex-direction: column; /* Alinear en columna */
 }
