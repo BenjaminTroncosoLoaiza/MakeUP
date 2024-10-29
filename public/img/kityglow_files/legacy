@@ -1,0 +1,394 @@
+
+if(typeof VirtooalDebugger == 'undefined') {
+    function VirtooalDebugger(gState, klass) {
+        this.debug = {}
+        if (gState) {
+            for (var m in console)
+                if (typeof console[m] == 'function')
+                    this.debug[m] = console[m].bind(window.console, "[Auglio Log]: ")
+        } else {
+            for (var m in console)
+                if (typeof console[m] == 'function')
+                    this.debug[m] = function(){}
+        }
+        return this.debug
+    }
+}
+const virtooalHelpers = new VirtooalHelpers();
+const virtooalApp = new VirtooalApp();
+virtooalApp.init();
+
+function VirtooalHelpers() {
+    this.createElementFromHTML = function(htmlString) {
+        let div = document.createElement('div');
+        div.innerHTML = htmlString.trim();
+        return div.firstChild;
+    }
+
+    this.addScript = function(url) {
+        var po = document.createElement('script');
+        po.type = 'text/javascript';
+        po.async = true;
+        po.src = url;
+        document.body.appendChild(po);
+        return po;
+    }
+
+    this.getParameterByName = function(name) {
+        if (typeof virtooal_item_id === 'undefined') {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, " "));
+
+        } else {
+            return virtooal_item_id;
+        }
+    }
+
+    this.getInsertMode = function(id) {
+        const modes = ['beforebegin', 'afterend', 'beforeend', 'afterbegin'];
+        return modes[id] || 'afterend';
+    }
+}
+function VirtooalApp() {
+    const partnerID = 8002;
+    var config = {"id":8002,"API_KEY":"4b521b5dabfc330f53df3743390ea2f1","username":"ayudacliente@petrizzio.cl","lang":"es","widget_thumb":63,"widget_color1":0,"widget_color2":"ffffff","widget_lang":"en","mirror_enabled":1,"mirrorWidth":270,"title":"Espejo Virtual","titleLeft":"Espejo","titleRight":"Virtual","side":"right","iconShowMobile":0,"loadFirstProduct":"yes","fullscreenWidth":1,"openFullScreenDesktop":0,"browse":"true","hideIfNoProduct":"yes","model":14,"modelMale":18,"color1":0,"color2":0,"tryon_text":"","tryon_display":"block","closeLiveOnMinimize":1,"widget_enabled":0,"tryon_bgcolor":0,"tryon_textcolor":"ffffff","LiveAsDefault":0};
+    const restrictions = {"allowOnly":[],"deny":["/password"],"denyHome":[]};
+    const places = [{"partner_id":"8002","script_tag_enabled":"0","tryonbtn_class":null,"tryonbtn_css":null,"tryonbtn_insert_selector":null,"tryonbtn_insert_mode":null,"widget_insert_selector":null,"widget_insert_mode":null,"new_script":"1","console_logging":"0"}]; 
+    const crossmirrorVersion = 1721050009;
+    const virtooalHelpers = new VirtooalHelpers();
+    const virtooalLogger = VirtooalDebugger(false, this);
+    const self = this;
+    let currentId = 0;
+    this.init = () => {
+        let halt = false;
+        virtooalLogger.log('Initialization');
+        //page restrictions, //TODO lehet hogy be fog kelleni állítani a legacy embed blocknak hogy page, blog stb. oldalakon is megjelenjen
+        let href = window.location.href;
+        if((restrictions.allowOnly.length && restrictions.allowOnly.every(item => href.indexOf(item) < 0))
+        || (restrictions.deny.length && restrictions.deny.some(item => href.indexOf(item) >= 0))
+        || (restrictions.denyHome.length && window.location.pathname == '/')
+        ) {
+            virtooalLogger.log('Virtual Mirror is disabled on this page');
+            return false;
+        }
+        if(!config.mirror_enabled) {
+            virtooalLogger.log('Virtual Mirror is disabled in Big Mirror settings!');
+            return false;
+        }
+
+        if(window.location.href.indexOf('/products') < 0) {
+            addAutomirror().then(() => {
+                config = virtooalMirrorSettings;
+                if(config.mirror_enabled) {
+                    virtooalRefreshBtns(1);
+                }
+            });
+            return;
+        }
+
+        id = getVariantID(null);
+        if(!id) {
+            virtooalLogger.log('Variant ID not found');
+            return;
+        }
+        runRefresh(id);
+
+        //if option selector clicked
+        document.addEventListener('click', (e) => {
+            if(e.target 
+            && (e.target.classList.contains('single-option-selector') || e.target.classList.contains('ColorSwatch'))
+            ) {
+                virtooalLogger.log('Option selector clicked');
+                checkIdChange().then(newId => runRefresh(newId));
+            }
+        });
+
+        history.pushState = (f => function pushState() {
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('pushState'));
+            window.dispatchEvent(new Event('locationchange'));
+            return ret;
+        })(history.pushState);
+
+        history.replaceState = (f => function replaceState() {
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('replaceState'));
+            window.dispatchEvent(new Event('locationchange'));
+            return ret;
+        })(history.replaceState);
+
+        window.addEventListener('popstate', () => {
+            window.dispatchEvent(new Event('locationchange'))
+        });
+
+        //if url changes
+        window.addEventListener('locationchange', function() {
+            virtooalLogger.log('locationchange detected');
+            checkIdChange().then(newId => runRefresh(newId));
+        });
+        
+    };
+
+    const getVariantID = (oldId) => {
+        let id = 0;
+        let idTemp = 0;
+        if (!parseInt(id)) {
+            idTemp = virtooalHelpers.getParameterByName('variant');
+            if(parseInt(idTemp) != oldId) {
+                id = idTemp;
+                virtooalLogger.log('Variant ID found in URL param:', id);
+        
+            }
+        }
+        const possibleSources = [
+            '[name="id"]',
+            '#shopify-virtooal-item-id',
+            'select.single-option-selector',
+            '#product-select',
+        ];
+        let i = 0;
+        while(i < possibleSources.length && !parseInt(id)){
+            virtooalLogger.log('Variant ID search in ' + possibleSources[i]);
+                
+            if(document.querySelectorAll(possibleSources[i]).length) {
+                idTemp = document.querySelectorAll(possibleSources[i])[0].value;
+                if(parseInt(idTemp) != oldId) {
+                    id = idTemp;
+                }
+                virtooalLogger.log('Variant ID found in ' + possibleSources[i], id);
+            }
+            i++;
+        }
+        if (!parseInt(id) && typeof ShopifyAnalytics !== 'undefined' ) {
+            id = ShopifyAnalytics.meta.selectedVariantId;
+            if(!id && ShopifyAnalytics.meta.hasOwnProperty('product') 
+            && ShopifyAnalytics.meta.product.variants.length) {
+                idTemp = ShopifyAnalytics.meta.product.variants[0].id;
+                if(parseInt(idTemp) != oldId) {
+                    id = idTemp;
+                    virtooalLogger.log('Variant ID found in ShopifyAnalytics meta:', id);
+                }
+            }
+        }
+        return id;
+    };
+
+    const addWidget = (id) => {
+        if(document.getElementById('virtooal-widget-container')) {
+            return false;
+        }
+        const widgetContainer = virtooalHelpers.createElementFromHTML(
+            `<div id=virtooal-widget-container" style="margin-top: 20px; margin-bottom: 20px;">
+                <div class="virtooal-widget">
+                    <div class="gw-container" style="margin: 0 auto"></div>
+                    <input type="hidden" class="virtooal-itemid" value="${id}">
+                </div>
+            </div>`
+        );
+
+        places.some(item => {
+            let place = document.querySelector(item.widget_insert_selector);
+            if(place) {
+                virtooalLogger.log(item);
+                place.insertAdjacentElement(virtooalHelpers.getInsertMode(item.widget_insert_mode),widgetContainer);
+                return true;
+            }
+        });
+        document.querySelectorAll('script[src*="widget.virtooal.com/magicmirror"]')
+            .forEach(e => e.parentNode.removeChild(e));
+        virtooalHelpers.addScript(`//widget.virtooal.com/${config.id}/${config.API_KEY}/${config.widget_lang}/${id}`);
+        virtooalLogger.log('Widget added');
+    };
+
+    const removeWidget = () => {
+        document.querySelectorAll('#virtooal-widget-container, script[src*="widget.virtooal.com"], link[href*="widget.virtooal.com"]')
+            .forEach(e => e.parentNode.removeChild(e));
+    };
+
+    const addBigMirror = () => new Promise((resolve, reject) => {
+        if(document.getElementById('virtooal-mirror-fix-container')) {
+            virtooalLogger.log('Big Mirror already loaded');
+            resolve();
+            return;
+        }
+        const mirrorContainer = virtooalHelpers.createElementFromHTML(
+            `<div id="virtooal-mirror-fix-container">
+                <div id="virtooal-mirror-fix-content">
+                    <div id="virtooal-mirror-title"></div>
+                    <div id="virtooal-mirror-fix-iframe"></div>
+                </div>
+            </div>`
+        );
+        document.body.appendChild(mirrorContainer);
+        //TODO: elem.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100;background:#000';
+        virtooalHelpers.addScript('//mirror.virtooal.com/assets/js/widget.js');
+        const crossmirrorScript = virtooalHelpers.addScript(`//mirror.virtooal.com/assets/js/crossmirror.php?v=${crossmirrorVersion}&api_key=${config.API_KEY}`);
+        crossmirrorScript.onload = () => {
+            virtooalLogger.log('Crossmirror loaded');
+            resolve();
+        }
+        crossmirrorScript.onerror = () => {
+            reject('error')
+        }
+    });
+
+    const addAutomirror = () => new Promise((resolve, reject) => {
+        if (typeof isCrossmirrorLoaded !== 'undefined') {
+            virtooalLogger.log('Automirror already loaded');
+            resolve();
+            return;
+        }
+        virtooalLogger.log('Adding automirror script');
+        virtooalHelpers.addScript(`//m.virtooal.com/${config.API_KEY}`);
+        let timer;
+        let event = 'virtooalRefreshBtnsReady';
+
+        function listener() {
+            clearTimeout(timer);
+            document.removeEventListener(event, listener);
+            virtooalLogger.log('Automirror loaded');
+            resolve();
+        }
+
+        document.addEventListener(event, listener);
+        timer = setTimeout(() => {
+            document.removeEventListener(event, listener);
+            reject(new Error('waiting for ' + event + ' timed out. Automirror not loaded, the mirror is possibly turned off or there is other error in the script.'));
+        }, 30000);
+    });
+
+    const addTryOnBtns = (id) => {
+        const tryonBtnContainer = document.querySelector('.virtooalBtnContainer, #shopify-block-70f20528-600e-42a1-9983-e65ac37d6e83, .virtual-try-on');
+        if(tryonBtnContainer) {
+            let tryonBtn = tryonBtnContainer.querySelector('.virtooal-tryon-btn');
+            virtooalLogger.log('Try on button already added, changing data-virtooal_id to',id);
+            tryonBtn.setAttribute('data-virtooal_id',id);
+            return true;
+        }
+        let tryonBtn = document.querySelector('.virtooal-tryon-btn-product-page');
+        if(tryonBtn) {
+            virtooalLogger.log('Try on button already added, changing data-virtooal_id to',id);
+            tryonBtn.setAttribute('data-virtooal_id',id);
+            return true;
+        }
+        let buttonPlaced = false;
+        let tryonBtnTxt = virtooalMirrorSettings.tryon_text || 'Try On';
+        
+        if(places.length) { 
+            buttonPlaced = places.some(item => {
+                if(!item.tryonbtn_insert_selector) {
+                    virtooalLogger.log('Insert selector is empty, set it in Integration admin settings');
+                    return false;
+                }
+                let place = document.querySelector(item.tryonbtn_insert_selector);
+                if (place) {
+                    const buttonContainer = virtooalHelpers.createElementFromHTML(
+                        `<div class="virtooalBtnContainer">
+                            <button type="button" class="virtooal-tryon-btn ${item.tryonbtn_class}" data-virtooal_id="${id}" style="display:none; ${item.tryonbtn_css}">
+                                ${tryonBtnTxt}
+                            </button>
+                        </div>`
+                    );
+                    place.insertAdjacentElement(virtooalHelpers.getInsertMode(item.tryonbtn_insert_mode),buttonContainer);
+                    virtooalLogger.log('Try on button added '+virtooalHelpers.getInsertMode(item.tryonbtn_insert_mode)+': ' + item.tryonbtn_insert_selector);
+                    return true;
+                } else {
+                    virtooalLogger.log('Insert selector element not found on the page:',item.tryonbtn_insert_selector);
+                    return false;
+                }
+            });
+        } 
+        if(!buttonPlaced) {
+            const buttonContainer = virtooalHelpers.createElementFromHTML(
+                `<div class="virtooalBtnContainer" style="display: none">
+                    <button class="virtooal-tryon-btn" data-virtooal_id="${id}" style="display:none;">${tryonBtnTxt}</button>
+                </div>`
+            );
+            document.body.appendChild(buttonContainer);
+            virtooalLogger.log('Could not find any suitable place. Try On button appended to <body>');
+        }
+    };
+
+    const checkIdChange = () => new Promise((resolve, reject) => {
+        let oldId = id;
+        let interval = setInterval(() => {
+            virtooalLogger.log('checkIdChange: checking id change');
+            let newId = getVariantID(oldId);
+            if(newId != oldId && newId) {
+                id = newId;
+                virtooalLogger.log('checkIdChange: id changed to '+newId);
+                clearInterval(interval);
+                clearTimeout(timeout);
+                resolve(id);
+            }
+        },300);
+
+        let timeout = setTimeout(() => {
+            clearInterval(interval);
+            reject();
+        }, 5000);
+    });
+
+    const runRefresh = (newId) => {
+        if(currentId == newId) {
+            virtooalLogger.log('runRefresh aborted, id is the same as before');
+            return;
+        }
+        currentId = newId;
+        addAutomirror().then(() => {
+            virtooalLogger.log('Automirror loaded');
+            config = virtooalMirrorSettings;
+            if(config.mirror_enabled) {
+                addTryOnBtns(newId);
+                setTimeout(() => {
+                    virtooalRefreshBtns(1, () => {
+                        virtooalLogger.log('refesh btns callback');
+                        if((virtooalMirrorState == 2 && window.innerWidth > 640) || 
+                        (typeof isAuglioMinifiedAndOpened == 'function' && isAuglioMinifiedAndOpened())) {
+                            setTimeout(() => {
+                                let btn = document.querySelector('.virtooal-tryon-btn[data-virtooal_id="' + id + '"]');
+                                if(btn && btn.style.display != 'none') {
+                                    virtooalLogger.log('auto-clicking tryon button');
+                                    btn.click();
+                                }
+                            },1000);
+                        }
+                    },config.tryon_display);
+                }, 100);
+            } else {
+                virtooalLogger.log('Mirror is disabled in Big Mirror settings');
+            }
+            if(config.widget_enabled) {
+                removeWidget();
+                addWidget(newId);
+            }
+        });
+    }
+
+    const observeIdInput = () => {
+        const idInput = document.querySelector("[name=id]");
+        if(!idInput) {
+            return;
+        }
+        MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+        let observer = new MutationObserver((mutations, observer) => {
+            runRefresh(idInput.value);
+        });
+
+        //TODO: we still need to somehow detect input value property change
+        if (idInput.length) {
+            observer.observe(idInput, {
+                subtree: true,
+                childList:true,
+                attributes:true
+            });
+        }
+    }
+}
+
+function virtooal_shopify_cart_success(data)
+{
+    virtooalLogger.log('Shopify cart success event',data);
+    }
