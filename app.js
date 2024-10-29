@@ -20,8 +20,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Ruta principal
+
+app.get('/', (req, res) => {
+  res.render('inicio', { titulo: 'Make Up 7x8', mensaje: '¡Bienvenido(a)! ¿Has visto las novedades que traemos a tus opciones? ¡Aqui estan!' });
+  
+});
 app.get('/productos', (req, res) => {
   res.render('home', { titulo: 'Make Up 7x8', mensaje: '¡Bienvenido(a)! Aqui puedes comprar todo tipo de maquillaje' });
+  
+});
+
+app.get('/sobre', (req, res) => {
+  res.render('sobre', { titulo: 'Make Up 7x8'});
   
 });
 
@@ -29,4 +39,3 @@ app.get('/productos', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
-
