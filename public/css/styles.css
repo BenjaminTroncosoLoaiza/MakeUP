@@ -19,7 +19,7 @@ header {
     text-align: center;
     background-color: #ff4081;
     padding: 20px;
-    position: relative;
+
 }
 
 /* Estilo para el título del encabezado */
@@ -39,38 +39,6 @@ nav img {
     margin: 0 auto;
     display: block;
 }
-
-/* Contenedor de búsqueda */
-.lupa-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Estilo para el input de búsqueda */
-.lupa-container input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 250px;
-    transition: border-color 0.3s;
-}
-
-/* Efecto hover para el input de búsqueda */
-.lupa-container input:hover {
-    border-color: #ff4081;
-}
-
-/* Estilo para el ícono de búsqueda */
-.icon-search {
-    cursor: pointer;
-    margin-left: 10px;
-    font-size: 36px;
-    vertical-align: middle;
-}
-
 /* Estilos para la lista de navegación */
 nav ul {
     list-style-type: none;
@@ -92,7 +60,7 @@ nav ul li a {
 
 /* Efecto hover en los enlaces de navegación */
 nav ul li a:hover {
-    color: #ff4081;
+    color: #4d2431;
 }
 
 /* Estilo para los encabezados h1, h2, h3, h4 */
@@ -219,25 +187,69 @@ footer div a {
     text-align: center;
 }
 
-/* Estilo para el ícono del carrito de compras */
-.cart-icon {
+
+.btn-cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px; /* Aumentar el ancho del botón */
+    height: 70px; /* Aumentar la altura del botón */
+    border-radius: 10px;
+    border: none;
+    position: absolute; /* Posición absoluta para sacarlo del flujo normal */
+    top: 20px; /* Distancia desde la parte superior */
+    right: 20px; /* Distancia desde la derecha */
+}
+  
+  .btn-cart::after {
+    content: attr(data-quantity);
+    width: fit-content;
+    height: fit-content;
     position: absolute;
-    top: 20px;
-    right: 20px;
-}
-
-/* Estilo para el ícono dentro del carrito de compras */
-.cart-icon i {
-    font-size: 40px;
-    color: crimson;
-    transition: color 0.3s;
-}
-
-/* Efecto hover para el ícono del carrito */
-.cart-icon:hover i {
-    color: #ff4081;
-}
-
+    font-size: 15px;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    opacity: 0;
+    visibility: hidden;
+    transition: .2s linear;
+    top: 115%;
+  }
+  
+  .icon-cart {
+    width: 24.38px;
+    height: 30.52px;
+    transition: .2s linear;
+  }
+  
+  .icon-cart path {
+    fill: rgb(255, 255, 255);
+    transition: .2s linear;
+  }
+  
+  .btn-cart:hover > .icon-cart {
+    transform: scale(1.2);
+  }
+  
+  .btn-cart:hover > .icon-cart path {
+    fill: rgb(255, 255, 255);
+  }
+  
+  .btn-cart:hover::after {
+    visibility: visible;
+    opacity: 1;
+    top: 105%;
+  }
+  
+  .quantity {
+position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgb(255, 255, 255); /* Cambia el color según tu diseño */
+    color: white; /* Color del texto */
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 14px;  }
+  
 /* Estilo para títulos grandes */
 .pod {
     font-size: 48px;
@@ -288,6 +300,7 @@ h2 {
     top: -50px; /* Comienza fuera de la pantalla */
     width: 50px; /* Tamaño del ícono */
     animation: fall linear infinite;
+    z-index: 10; /* Asegúrate de que este valor sea mayor que el de otros elementos */
 }
 
 @keyframes fall {
@@ -298,14 +311,6 @@ h2 {
       transform: translateY(calc(100vh + 100px)); /* Termina más allá de la pantalla */
     }
   }
-
-.luna {
-    position: absolute;
-    top: 20px; /* Posición del ícono en la parte superior */
-    left: 20px; /* Posición del ícono a la izquierda */
-    width: 50px; /* Tamaño del ícono */
-    cursor: pointer; /* Cambia el cursor al pasar sobre el ícono */
-}
 
 /* Estilo para el contenedor del video */
 .video-container {
@@ -320,3 +325,181 @@ h2 {
     width: 100%; /* Ancho completo del contenedor */
     height: auto; /* Altura automática para mantener la proporción */
 }
+.switch {
+    font-size: 20px; /* Aumenta el tamaño de la fuente */
+    position: absolute; /* Posición absoluta para moverlo */
+    top: 20px; /* Distancia desde la parte superior */
+    left: 20px; /* Distancia desde la izquierda */
+    display: inline-block;
+    width: 4em; /* Aumentar el ancho del switch */
+    height: 2.5em; /* Aumentar la altura del switch */
+    cursor: pointer;
+}
+
+.switch input {
+    opacity: 0; /* Ocultar el checkbox */
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    --background: #20262c;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--background);
+    transition: 0.5s;
+    border-radius: 30px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 1.8em; /* Aumentar la altura del círculo */
+    width: 1.8em; /* Aumentar el ancho del círculo */
+    border-radius: 50%;
+    left: 10%;
+    bottom: 10%; /* Ajustar la posición vertical */
+    box-shadow: inset 8px -4px 0px 0px #ececd9, -4px 1px 4px 0px #dadada;
+    background: var(--background);
+    transition: 0.5s;
+}
+
+.decoration {
+    position: absolute;
+    content: "";
+    height: 2px;
+    width: 2px;
+    border-radius: 50%;
+    right: 20%;
+    top: 15%;
+    background: #e5f041e6;
+    backdrop-filter: blur(10px);
+    transition: all 0.5s;
+    box-shadow: -7px 10px 0 #e5f041e6, 8px 15px 0 #e5f041e6, -17px 1px 0 #e5f041e6,
+      -20px 10px 0 #e5f041e6, -7px 23px 0 #e5f041e6, -15px 25px 0 #e5f041e6;
+}
+
+input:checked ~ .decoration {
+    transform: translateX(-20px);
+    width: 10px;
+    height: 10px;
+    background: white;
+    box-shadow: -12px 0 0 white, -6px 0 0 1.6px white, 5px 15px 0 1px white,
+      1px 17px 0 white, 10px 17px 0 white;
+}
+
+input:checked + .slider {
+    background-color: #5494de;
+}
+
+input:checked + .slider:before {
+    transform: translateX(100%);
+    box-shadow: inset 15px -4px 0px 15px #efdf2b, 0 0 10px 0px #efdf2b;
+}
+  button {
+  background: transparent;
+  position: relative;
+  padding: 5px 15px;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid rgb(40, 144, 241);
+  border-radius: 25px;
+  outline: none;
+  overflow: hidden;
+  color: rgb(40, 144, 241);
+  transition: color 0.3s 0.1s ease-out;
+  text-align: center;
+}
+
+button span {
+  margin: 10px;
+}
+
+button::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  content: '';
+  border-radius: 50%;
+  display: block;
+  width: 20em;
+  height: 20em;
+  left: -5em;
+  text-align: center;
+  transition: box-shadow 0.5s ease-out;
+  z-index: -1;
+}
+
+button:hover {
+  color: #fff;
+  border: 1px solid rgb(40, 144, 241);
+}
+
+button:hover::before {
+  box-shadow: inset 0 0 0 10em rgb(40, 144, 241);
+}
+
+/* From Uiverse.io by LightAndy1 */ 
+.group {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra horizontalmente */
+    position: relative;
+    width: 100%; /* Asegúrate de que ocupe todo el ancho del contenedor padre */
+    max-width: 300px; /* Ajusta este valor a lo que necesites */
+    margin: 20px auto 0; /* Ajusta el margen superior según necesites */
+  }
+  
+  .input {
+    font-family: "Montserrat", sans-serif;
+    width: 100%;
+    height: 45px;
+    padding-left: 2.5rem;
+    box-shadow: 0 0 0 1.5px #2b2c37, 0 0 25px -17px #000;
+    border: 0;
+    border-radius: 12px;
+    background-color: #16171d;
+    outline: none;
+    color: #bdbecb;
+    transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    cursor: text;
+    z-index: 0;
+  }
+  
+  .input::placeholder {
+    color: #bdbecb;
+  }
+  
+  .input:hover {
+    box-shadow: 0 0 0 2.5px #2f303d, 0px 0px 25px -15px #000;
+  }
+  
+  .input:active {
+    transform: scale(0.95);
+  }
+  
+  .input:focus {
+    box-shadow: 0 0 0 2.5px #2f303d;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    fill: #bdbecb;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
